@@ -61,7 +61,7 @@ import "google/protobuf/empty.proto";
 - Use ; to terminate the method definition when there are no RPC options and {} when there are RPC options.
 
 
-  ```
+```protobuf
 // Without RPC options
 service HelloService;
 
@@ -69,7 +69,7 @@ service HelloService;
 service GoodbyeService {
   rpc SayGoodbye (SayGoodbyeRequest) returns (SayGoodbyeResponse);
 }
-  ```
+```
 
 ## RPCs
 - RPC names should be in CamelCase and begin with a verb (e.g. `StreamGalaxies`).
