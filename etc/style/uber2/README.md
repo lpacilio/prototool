@@ -74,9 +74,9 @@ service GoodbyeService {
 ## RPCs
 - RPC names should be in CamelCase and begin with a verb (e.g. `StreamGalaxies`).
 - Each RPC must have its own request and response message, even if the messages are empty. The request and response names should always match the RPC name.
-> **Why?:** This is for backwards compatibility.
+  > **Why?:** This is for backwards compatibility.
 
-```
+```protobuf
 // Example Service and RPCs.
 // The RPC has it's own request and response messages.
 
@@ -97,39 +97,39 @@ message GetPlanetResponse {
 - Use CamelCase for message names (e.g. `MapFeature`).
 
 - Request and response names should always match the rpc name.
-```
+```protobuf
 rpcStreamQuasars(stream StreamQuasarsRequest) returns (StreamQuasarsResponse);
 message StreamGalaxiesRequest{}
 ```
 - Request and response messages should not have any nested messages or enums.
 
 - If a message is empty, do not include a line break after the opening bracket.
-```
+```protobuf
 // No line break after opening bracket because message is empty.
 message StreamGalaxiesRequest{}
 ```
 
 ### Message Fields
 - Use all lowercase for message fields names, with underscores between each word.
-```
+```protobuf
 sint32 longitude micros = 3;
 ```
 
 - Use plural case for repeated message fields.
 > **Why?:** Traditionally for Protobuf, repeated fields use singular case. We prefer plural case because we have found that singular is more confusing and that few developers actually used singular case in practice anyway.
 
-  ```
+  ```protobuf
 repeated string planet_ids = 3;
 ```
 
 - Mark deprecated fields with `[deprecated = true]`. Include one space on each side of the equals sign.
 > **Why?:** We mark fields as deprecated, rather than removing them and setting them as reserved, because we want to disallow reusing field names for JSON compatibility. By keeping the field and marking it as deprecated, we make it impossible to reuse either the field tag or the field name.
 
-  ```
+  ```protobuf
 string foo = 1 [deprecated = true];
 ```
 - Use the "right" primitive type for the situation, regardless of generated code in the particular target language. For example, use uint32 for ports and not int32, uint64, int64, etc. See: https://developers.google.com/protocol-buffers/docs/proto3#scalar
-```
+```protobuf
 // Here an sint32 is used instead of int32 because there is a high
 // probability of having a negative value and 32 bits instead of 64,
 // as by definition, this will never exceed 32 bits.
@@ -143,7 +143,7 @@ sint32 longitude_micros = 4;
 - If there is a type enum associated with a message, the name of the field should be "type."
 
 - The ID field should use the first tag, unless there is a type field. When there is a type field, type should use the first tag and ID should use the second tag.
-```
+```protobuf
 // Message with just an ID.
 // ID is always a string.
 message Foo {
@@ -162,7 +162,7 @@ You can nest messages and enums, *except* in request and response messages. Nest
 >**Warning:** This affects the names of generated types and may add a great amount of verbosity, so do this at your own discretion.
 
 
-```
+```protobuf
 // Bar has an embedded Type enum and an ID.
 message Bar {
     enum Type {
@@ -196,7 +196,7 @@ string id = 2;
 > called count, I'd want it to default to 0 without setting it explicitly." The thing is,
 > enums are not integers, they are just represented as integers the proto
 > description. For example:
-```
+```protobuf
 // Don't do this.
 // A consumer of this message might forget to set any Shape
 // fields that exist, and then the default value of Circle will
@@ -209,7 +209,7 @@ SHAPE_RECTANGLE = 1;
 
 - If you want to denote a purposefully unset value, include one value with the suffix `_UNSET`. If you include an `_UNSET` enum value, it must be numbered 1 (e.g. ``{ENUM_TYPE}_UNSET = 1);``.
 > **Why?** If you make `_UNSET` the default, it may appear as if the user has intentionally set the value to `_UNSET` when really, they just forgot to set a value for the enum.
-```
+```protobuf
 // Correct use of _INVALID and _UNSET
 enum TrafficLight {
   TRAFFIC_LIGHT_INVALID = 0;
@@ -262,7 +262,7 @@ Overview and contextual information placed above the syntax line. Consider inclu
 - @see tag to indicate closely related files
 - @link tag to link to external documentation (e.g. Map Feature definitions)
 
-```proto
+```protobuf
 //insert example here
 ```
 **[⬆ back to top ](#table-of-contents)**
@@ -273,7 +273,7 @@ Explanation of what the service is intended to do/not do. Consider including:
 - Advantage or use cases
 - Related services (mark with the @see annotation)
 
-```proto
+```protobuf
 //insert example here
 ```
 **[⬆ back to top ](#table-of-contents)**
@@ -287,7 +287,7 @@ Explanation of what the rpc is intended to do/not do. Consider including:
 - Pre-requisites (e.g. "You must complete registration using the X method before calling this one.")
 - Post-requisites (e.g. "Clean up the registered resource after use to free up resources.")
 
-```proto
+```protobuf
 //Write a feature to a map. If a feature with the same ID already exists,
 //this method will overwrite it.
 rpc WriteFeature(WriteFeatureRequest) returns (WriteFeatureResponse);
@@ -303,7 +303,7 @@ Description of message, beginning with "Represents." Consider including:
 - Assumptions and requirements
 - What happens when the field is left blank. Does it default to a specific value or throw an invalid argument error?
 
-```proto
+```protobuf
 EXAMPLE HERE
 ```
 
@@ -314,7 +314,7 @@ EXAMPLE HERE
 - Error name should be preceded with an @exception annotation.
 - Error name should be followed by “if” and then a description of the case(s) in which the error is thrown.
 
-```proto
+```protobuf
 // @exception INVALID_ARGUMENT if the polygon has:
 // - coincident points.
 // - fewer than three points.
